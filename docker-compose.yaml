@@ -1,0 +1,93 @@
+version: "3.9"
+
+services:
+
+   frontend-rest:
+    build:
+      context: ./frontend-rest
+      dockerfile: Dockerfile
+    container_name: frontend-rest
+    ports:
+      - "5000:5000"
+    volumes:
+    # to make changes dynamically without reloading docker compose
+      - ./frontend-rest/src:/app/src
+      - ./frontend-rest/index.html:/app/index.html
+    depends_on:
+      - backend-rest
+
+   backend-rest: 
+    build: 
+      context: ./rest-server
+      dockerfile: Dockerfile
+    container_name: backend-rest
+    ports: 
+      - "3001:3001"
+    depends_on:
+      - mongodb
+
+   frontend-graphql:
+    build:
+      context: ./frontend-graphql
+      dockerfile: Dockerfile
+    container_name: frontend-graphql
+    ports:
+      - "5001:5001"
+    volumes:
+    # to make changes dynamically without reloading docker compose
+      - ./frontend-graphql/src:/app/src
+      - ./frontend-graphql/index.html:/app/index.html
+    depends_on:
+      - backend-graphql
+
+   backend-graphql: 
+    build: 
+      context: ./graphql-server
+      dockerfile: Dockerfile
+    container_name: backend-graphql
+    ports: 
+      - "8082:8082"
+    depends_on:
+      - mongodb
+
+   frontend-grpc:
+    build:
+      context: ./frontend-grpc
+      dockerfile: Dockerfile
+    container_name: frontend-grpc
+    ports:
+      - "5002:5002"
+    volumes:
+    # to make changes dynamically without reloading docker compose
+      - ./frontend-grpc/src:/app/src
+      - ./frontend-grpc/index.html:/app/index.html
+    depends_on:
+      - backend-grpc
+
+   backend-grpc: 
+    build: 
+      context: ./grpc-server
+      dockerfile: Dockerfile
+    container_name: backend-grpc
+    ports:  
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - mongodb
+
+   mongodb:
+    image: mongo:6
+    container_name: video_mongodb_container
+    ports:
+      - 27023:27017
+    volumes:
+      - ./database/mongo/db:/data/db
+      - ./database/mongo/users.js:/docker-entrypoint-initdb.d/users.js:ro
+      - ./database/mongo/collections.js:/docker-entrypoint-initdb.d/collections.js:ro
+      - ./database/mongo/mongod.conf:/etc/mongod.conf
+
+    environment:
+      - MONGO_DATA_DIR= /data/db
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=bucket_gains_tracker_mongodb
