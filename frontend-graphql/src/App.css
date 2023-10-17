@@ -1,0 +1,19 @@
+/* App.css */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: lightsteelblue; /* Set the background color for the whole page */
+  /* overflow: hidden;  */
+  /* Optional: Prevent scrolling */
+}
+
+.app-container {
+  margin: 0;
+  padding: 0;
+  /* background-color: red; */
+  width: 100%;
+  height: 100%;
+}
