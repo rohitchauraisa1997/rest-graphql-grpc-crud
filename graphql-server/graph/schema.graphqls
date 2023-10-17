@@ -1,0 +1,29 @@
+type Video {
+  id:ID!
+  title:String!
+  url:String!
+  author:User!
+
+}
+
+type User {
+  id: ID!
+  name: String!
+}
+
+type Query{
+  videos: [Video!]!
+  getVideo(id:String!):Video!
+}
+
+input NewVideo{
+  title: String!
+  url:String!
+  author: String!
+}
+
+type Mutation{
+  createVideo(input:NewVideo!):Video!
+  deleteVideo(id:String!):Video!
+  updateVideo(id:String!, input:NewVideo):Video!
+}
