@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package main;
+
+option go_package="./proto";
+
+import "google/api/annotations.proto";
+
+service VideoApi{
+    rpc Echo(TestResponseRequest) returns (TestResponseRequest) {
+        option(google.api.http) = {
+            post : "/echo"
+            body: "*"
+         };
+    }
+
+    rpc GetVideos(NoParam) returns (VideoList){
+        option(google.api.http) = {
+            get : "/videos/all"
+         };
+    }
+
+    rpc GetVideo(Id) returns (Video){
+        option(google.api.http) = {
+            get : "/video"
+         };
+    }
+
+    rpc AddVideo(NewVideo) returns (Video){
+        option(google.api.http) = {
+            post : "/video/add"
+            body: "*"
+         };
+    }
+
+    rpc DeleteVideo(Id) returns (Video){
+        option(google.api.http) = {
+            delete : "/video/delete"
+         };
+    }
+}
+
+message NoParam{};
+
+message TestResponseRequest{
+    string msg = 1;
+} 
+
+message VideoList {
+    repeated Video videos = 1;
+}
+
+message Video{
+    string id = 1;
+    string title = 2;
+    string url = 3;
+    User author = 4;
+}
+
+message User {
+    string id= 1;
+    string name= 2;
+}
+
+message Id{
+    string id=1;
+}
+
+message NewVideo{
+    string title = 1;
+    string url = 2;
+    string author = 3;
+}
